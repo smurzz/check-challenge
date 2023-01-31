@@ -6,10 +6,10 @@ function AllChallenges() {
     return (
         <Container className='pb-4'>
             <Card className='mb-3' border='secondary'>
-                <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N2_Max_Mustermann</a></Card.Header>
+                <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenge_N2_Max_Mustermann</a></Card.Header>
                 <Card.Body>
                     <Card.Title>Java Developer</Card.Title>
-                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenage_N2_Max_Mustermann </Card.Link> 
+                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenge_N2_Max_Mustermann </Card.Link> 
                     </Card.Text>
                     <Button variant="success">Evaluate</Button>
                     <Button variant="outline-success" className='ms-3'>View</Button>
@@ -18,10 +18,10 @@ function AllChallenges() {
             </Card>
 
             <Card className='mb-3' border='success'>
-            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N7_John_Smith</a></Card.Header>
+            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenge_N7_John_Smith</a></Card.Header>
                 <Card.Body>
-                    <Card.Title>Special title treatment</Card.Title>
-                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenage_N7_John_Smith </Card.Link> 
+                    <Card.Title>Developer</Card.Title>
+                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenge_N7_John_Smith </Card.Link> 
                     </Card.Text>
                     <Button variant="success">Evaluate</Button>
                     <Button variant="outline-success" className='ms-3'>View</Button>
@@ -30,10 +30,10 @@ function AllChallenges() {
             </Card>
 
             <Card className='mb-3' border='success'>
-            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N11_Yamada Hanako</a></Card.Header>
+            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenge_N11_Yamada Hanako</a></Card.Header>
                 <Card.Body>
-                    <Card.Title>Special title treatment</Card.Title>
-                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenage_N11_Yamada Hanako </Card.Link> 
+                    <Card.Title>Java Software Engineer</Card.Title>
+                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenge_N11_Yamada Hanako </Card.Link> 
                     </Card.Text>
                     <Button variant="success">Evaluate</Button>
                     <Button variant="outline-success" className='ms-3'>View</Button>
@@ -42,10 +42,10 @@ function AllChallenges() {
             </Card>
 
             <Card className='mb-3' border='secondary'>
-            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N7_Kari_Nordmann</a></Card.Header>
+            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenge_N7_Kari_Nordmann</a></Card.Header>
                 <Card.Body>
-                    <Card.Title>Special title treatment</Card.Title>
-                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenage_N7_Kari_Nordmann </Card.Link> 
+                    <Card.Title>Developer backend</Card.Title>
+                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenge_N7_Kari_Nordmann </Card.Link> 
                     </Card.Text>
                     <Button variant="success">Evaluate</Button>
                     <Button variant="outline-success" className='ms-3'>View</Button>
@@ -54,9 +54,9 @@ function AllChallenges() {
             </Card>
 
             <Card className='mb-3' border='warning'>
-            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N18_Tante_Amalie</a></Card.Header>
+            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenge_N18_Tante_Amalie</a></Card.Header>
                 <Card.Body>
-                    <Card.Title>Special title treatment</Card.Title>
+                    <Card.Title>Senior Software Developer</Card.Title>
                     <Card.Text> Link to repository: 
                         <Card.Link href='#'> https://github.com/challenage_N18_Tante_Amalie </Card.Link> 
                     </Card.Text>

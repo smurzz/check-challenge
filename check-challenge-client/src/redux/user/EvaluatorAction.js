@@ -52,10 +52,10 @@ export function createEvaluatorSuccessAction(res) {
     }
 }
 
-export function createEvaluatorErrorAction(errorMessage) {
+export function createEvaluatorErrorAction(error) {
     return {
         type: FAIL_CREATE_EVALUATOR,
-        error: errorMessage
+        error: error
     }
 }
 
@@ -101,7 +101,7 @@ export function editEvaluatorSuccessAction(res) {
 export function editEvaluatorErrorAction(error) {
     return {
         type: FAIL_EDIT_EVALUATOR,
-        status: error.status
+        error: error
     }
 }
 
@@ -134,6 +134,7 @@ export function createEvaluator(evaluators) {
 
     return async dispatch => {
         dispatch(getEvaluatorsPendingAction());
+        var errorMessage;
 
         await refreshTokenService.refreshTokenIfExpired()
             .then(() => {
@@ -148,49 +149,75 @@ export function createEvaluator(evaluators) {
                         dispatch(createEvaluatorSuccessAction(response));
                     })
                     .catch(error => {
-                        const errorMessage = error.response.data.message;
+                        errorMessage = error.response.data.message;
                         dispatch(createEvaluatorErrorAction(errorMessage));
                     })
             })
-            .catch(error => dispatch(getEvaluatorsErrorAction(error)));
+            .catch(error => {
+                errorMessage = error.response.data.message;
+                dispatch(getEvaluatorsErrorAction(error));
+            })
     }
 }
 
 export function deleteEvaluator(evaluatorID) {
-    return dispatch => {
+    
+    return async dispatch => {
         dispatch(deleteEvaluatorPendingAction());
-        const requestOptions = {
-            headers: {
-                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('userSession')).accessToken
-            }
-        };
-        axios.delete('/users/' + evaluatorID, requestOptions)
-            .then(response => {
-                const action = deleteEvaluatorSuccessAction(response);
-                dispatch(action);
-            })
-            .catch(error => {
-                dispatch(deleteEvaluatorErrorAction(error.message));
-            })
+        var errorMessage;
+
+        await refreshTokenService.refreshTokenIfExpired()
+        .then(() => {
+            const requestOptions = {
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('userSession')).accessToken
+                }
+            };
+            axios.delete('/users/' + evaluatorID, requestOptions)
+                .then(response => {
+                    const action = deleteEvaluatorSuccessAction(response);
+                    dispatch(action);
+                })
+                .catch(error => {
+                    errorMessage = error.response.data.message;
+                    dispatch(deleteEvaluatorErrorAction(errorMessage));
+                })
+        })
+        .catch(error => {
+            errorMessage = error.response.data.message;
+            dispatch(deleteEvaluatorErrorAction(errorMessage));
+        })
+
     }
 }
 
 export function editEvaluator(evaluatorID, evaluator) {
-    return dispatch => {
+
+    return async dispatch => {
         dispatch(editEvaluatorPendingAction());
-        const requestOptions = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('userSession')).accessToken
-            }
-        };
-        axios.put('/users/' + evaluatorID, evaluator, requestOptions)
-            .then(response => {
-                const action = editEvaluatorSuccessAction(response);
-                dispatch(action);
+        var errorMessage;
+
+        await refreshTokenService.refreshTokenIfExpired()
+            .then(() => {
+                const requestOptions = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('userSession')).accessToken
+                    }
+                };
+                axios.put('/users/' + evaluatorID, evaluator, requestOptions)
+                    .then(response => {
+                        const action = editEvaluatorSuccessAction(response);
+                        dispatch(action);
+                    })
+                    .catch(error => {
+                        errorMessage = error.response.data.message;
+                        dispatch(editEvaluatorErrorAction(errorMessage));
+                    })
             })
             .catch(error => {
-                dispatch(editEvaluatorErrorAction(error.message));
+                errorMessage = error.response.data.message;
+                dispatch(editEvaluatorErrorAction(errorMessage));
             })
     }
 }

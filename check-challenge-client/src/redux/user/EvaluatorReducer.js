@@ -37,27 +37,27 @@ export default function userReducer(state = initialState, action) {
             return {
                 ...state,
                 showLoginDialog: true,
-                errorCreateUser: null
+                error: null
             }
         case evaluatorActions.SUCCESS_CREATE_EVALUATOR:
             return {
                 ...state,
                 pending: false,
                 status: action.status,
-                errorCreateUser: null
+                error: null
             }
         case evaluatorActions.FAIL_CREATE_EVALUATOR:
             return {
                 ...state,
                 pending: false,
-                errorCreateUser: action.error
+                error: action.error
             }
         case evaluatorActions.CLEAR_DATA_CREATE_EVALUATOR:
             return{
                 ...state,
                 pending: false,
                 status: '',
-                errorCreateUser: null
+                error: null
             }
         case evaluatorActions.REQUEST_DELETE_EVALUATOR:
             return {

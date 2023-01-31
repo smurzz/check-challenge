@@ -22,32 +22,28 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
     const [error, setError] = useState(false);
     const [user, setUser] = useState(
         {
-            firstName: props.evaluator ? props.evaluator.firstName :  "",
-            lastName: props.evaluator ? props.evaluator.lastName : "",
-            position: props.evaluator ? props.evaluator.position : "",
-            email: props.evaluator ? props.evaluator.email : "",
-            password: "",   /* evaluator ? evaluator.password :  */
-            active: props.evaluator ? props.evaluator.active : false,
-            roles: props.evaluator ? props.evaluator.roles : []
+            firstName: "",
+            lastName: "",
+            position: "",
+            email: "",
+            password: "",   
+            active: false,
+            roles: []
         });
    
-    const createEvaluatorHandler = (user) => {
-        dispatch(evaluatorActions.createEvaluator(user));
-    }
-
-    const createEvaluatorClearDataHandler = () => {
-        dispatch(evaluatorActions.createEvaluatorClearDataAction());
-    }
+    const createEvaluatorHandler = (user) => dispatch(evaluatorActions.createEvaluator(user));
+    const editEvaluatorHandler = (email, user) => dispatch(evaluatorActions.editEvaluator(email, user));
+    const createEvaluatorClearDataHandler = () => dispatch(evaluatorActions.createEvaluatorClearDataAction());
 
     useEffect(() => {
-        const resSuccess = evalData.status === 201;
+        const resSuccess = evalData.status === 201 || evalData.status === 204;
         setSuccess(resSuccess);
     }, [evalData.status, createEvaluatorHandler]);
 
     useEffect(() => {
-        var isError = evalData.errorCreateUser !== null && evalData.errorCreateUser !== undefined;
+        var isError = evalData.error!== null && evalData.error !== undefined;
         setError(isError);
-    }, [evalData.errorCreateUser, createEvaluatorHandler]);
+    }, [evalData.error, createEvaluatorHandler]);
 
     const clearAllDataAfterCloseHandler = () => {
         createEvaluatorClearDataHandler();
@@ -67,7 +63,18 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        createEvaluatorHandler(user);
+
+        var userUpdate = props.evaluator ? {
+            firstName: user.firstName ? user.firstName : props.evaluator.firstName,
+            lastName: user.lastName ? user.lastName : props.evaluator.lastName,
+            position: user.position ? user.position : props.evaluator.position,
+            email: user.email ? user.email : props.evaluator.email,
+            password: user.password ? user.password : props.evaluator.password,
+            active: user.active ? user.active : props.evaluator.active,
+            roles: user.roles ? user.roles : props.evaluator.roles
+        } : null;
+        console.log(user);
+        props.evaluator ? editEvaluatorHandler(props.evaluator.email, userUpdate) : createEvaluatorHandler(user);
         success ? setUser({
             firstName: "",
             lastName: "",
@@ -90,14 +97,14 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
     }
 
     if (error === true) {
-        const serverErrorMessage = evalData.errorCreateUser + '';
+        const serverErrorMessage = evalData.error + '';
         var errMessage = serverErrorMessage.split(',').map(str => <p>{str}</p>);
         errorMessage = (
             <Alert className="text-center mt-3" variant='danger'> {errMessage} </Alert>);
     }
 
     if(ev){
-        buttonUpdateOrCreate = <Button variant="outline-secondary" className='rounded-circle ms-2' onClick={handleShow}> <TfiPencilAlt /> </Button>
+        buttonUpdateOrCreate = <Button variant="outline-secondary" className='rounded-circle' onClick={handleShow}> <TfiPencilAlt /> </Button>
     } else {
         buttonUpdateOrCreate = <Button variant="success" onClick={handleShow}>Add evaluater</Button>
     }
@@ -121,23 +128,24 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
                 type="text"
                 name='lastName'
                 placeholder="Last Name"
-                value={user.lastName}
+                value={props.evaluator && !user.lastName ? props.evaluator.lastName : user.lastName}
                 onChange={async (e) => { setUser({ ...user, lastName: e.target.value }); }} />
             <Form.Control
                 className="form-control"
                 type="text"
                 name='position'
                 placeholder="Position"
-                value={user.position}
+                value={props.evaluator && !user.position ? props.evaluator.position : user.position}
                 onChange={async (e) => { setUser({ ...user, position: e.target.value }) }} />
             <Form.Control
                 className="form-control"
+                disabled={props.evaluator}
                 type="email"
                 name='email'
                 placeholder="Email"
-                value={user.email}
+                value={props.evaluator && !user.email ? props.evaluator.email : user.email}
                 onChange={async (e) => { setUser({ ...user, email: e.target.value }); }}
-                required />
+                required={!props.evaluator} />
             <Form.Control
                 className="form-control"
                 type="password"
@@ -145,7 +153,7 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
                 placeholder="Password"
                 value={user.password}
                 onChange={async (e) => { setUser({ ...user, password: e.target.value }); }}
-                required />
+                required={!props.evaluator} />
 
             <Form.Label><b>Account Setup Information</b></Form.Label>
             <Form.Check
@@ -154,7 +162,7 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
                 name="active"
                 label="Active account"
                 className="mb-2"
-                checked={user.active}
+                checked={props.evaluator && !user.active ? props.evaluator.active : user.active}
                 onChange={async (e) => { setUser({ ...user, active: e.target.checked }) }}>
             </Form.Check>
 
@@ -166,7 +174,7 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
                         type='checkbox'
                         label={role}
                         value={role}
-                        checked={(props.evaluator ? props.evaluator.roles.includes(role) : false)}
+                        checked={(props.evaluator ? props.evaluator.roles.includes(role) : null)}
                         onChange={handleAddRoles}
                     />
                 </div>
@@ -179,7 +187,7 @@ function NewEvaluator(props) {      /* { refresh, evaluator } */
                 variant="success"
                 size="lg"
                 onClick={handleSubmit}>
-                Create
+                Save
             </Button>
         </Modal.Footer>
         {errorMessage}

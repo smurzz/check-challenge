@@ -17,11 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequest {
-    @NotBlank
+	
     @Size(min = 2, max = 30)
     private String firstName;
 
-    @NotBlank
     @Size(min = 2, max = 30)
     private String lastName;
 
@@ -33,7 +32,6 @@ public class UserRequest {
     @Email
     private String email;
 
-    @NotBlank
     @Size(min = 3, max = 20)
     private String password;
 

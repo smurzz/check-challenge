@@ -3,6 +3,7 @@ import MainMenu from './components/MainMenu';
 import AllChallenges from './components/callenges/AllChallenges';
 import InProcessingChallenges from './components/callenges/InProcessingChallenges';
 import CompletedChallenges from './components/callenges/CompletedChallenges';
+import UnevaluatedChallenges from './components/callenges/UnevaluatedChallenges';
 
 import { Container, Tab, Tabs } from 'react-bootstrap';
 import '../../layout/css/home-page.css'
@@ -24,6 +25,9 @@ function HomePrivate() {
                 >
                     <Tab eventKey="all" title="All">
                         <AllChallenges />
+                    </Tab>
+                    <Tab eventKey="unevaluated" title="Unevaluated">
+                        <UnevaluatedChallenges />
                     </Tab>
                     <Tab eventKey="in-processing" title="In processing">
                         <InProcessingChallenges />

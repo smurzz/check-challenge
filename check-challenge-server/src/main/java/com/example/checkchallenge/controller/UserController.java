@@ -64,7 +64,7 @@ public class UserController {
                         user.getRoles() ))
     			.map(res ->new ResponseEntity(HttpStatus.CREATED))
                 .onErrorResume(org.springframework.dao.DuplicateKeyException.class, err ->
-                        Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email " + user.getEmail() + " is already occupied")))
+                    Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email " + user.getEmail() + " is already occupied")))
                 .onErrorResume(IllegalArgumentException.class, error -> 
 					Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error by creating user")));
     }

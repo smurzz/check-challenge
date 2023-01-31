@@ -8,7 +8,7 @@ function InProcessingChallenges() {
             <Card className='mb-3' border='warning'>
             <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N18_Tante_Amalie</a></Card.Header>
                 <Card.Body>
-                <Card.Title>Java Backend Developer</Card.Title>
+                <Card.Title>Senior Software Developer</Card.Title>
                     <Card.Text> Link to repository: 
                         <Card.Link href='#'> https://github.com/challenage_N18_Tante_Amalie </Card.Link> 
                     </Card.Text>
