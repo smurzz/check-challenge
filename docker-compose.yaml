@@ -1,0 +1,84 @@
+version: '3.8'
+
+# Define services
+services:
+  # App backend service
+  app-server:
+    # Configuration for building the docker image for the backend service
+    build:
+      context: check-challenge-server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      dockerfile: Dockerfile
+    container_name: app-server
+    ports:
+      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    restart: always
+    links:
+      - mongo-express
+      - mongo
+    depends_on: 
+      - mongo-express
+      - mongo
+#    environment:
+#      SPRING_DATA_MONGODB_HOST: mongo
+#      SPRING_DATA_MONGODB_PORT: 27017
+#      SPRING_DATA_MONGODB_DATABASE: check-challenges-db
+#      SPRING_DATA_MONGODB_USERNAME: admin
+#      SPRING_DATA_MONGODB_PASSWORD: password
+#      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
+#      SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: true
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+      - frontend
+  
+  # Frontend Service 
+  app-client:
+    build:
+      context: check-challenge-client # Use an image built from the specified dockerfile in the `polling-app-client` directory.
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_BASE_URL: http://127.0.0.1:3000
+    container_name: app-client
+    ports:
+      - "3000:3000" # Map the exposed port 80 on the container to port 9090 on the host machine
+    restart: always
+    depends_on:
+      - app-server
+    networks:
+      - frontend 
+
+# Database Service (MongoDB, Mongo-Express)
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: check-challenges-db
+    volumes:
+      - challenge-db:/data/db
+    networks:
+      - backend
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: "mongodb://admin:password@mongo:27017/"
+    networks:
+      - backend
+# Volumes
+volumes:
+  challenge-db:
+    # driver: local
+    
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+  frontend:  
