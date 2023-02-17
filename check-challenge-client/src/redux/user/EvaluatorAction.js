@@ -9,7 +9,7 @@ export const FAIL_READ_EVALUATORS = 'FAIL_READ_EVALUATORS';
 export const REQUEST_CREATE_EVALUATOR = 'REQUEST_CREATE_EVALUATOR';
 export const SUCCESS_CREATE_EVALUATOR = 'SUCCESS_CREATE_EVALUATOR';
 export const FAIL_CREATE_EVALUATOR = 'FAIL_CREATE_EVALUATOR';
-export const CLEAR_DATA_CREATE_EVALUATOR = 'CLEAR_DATA_CREATE_EVALUATOR';
+export const CLEAR_DATA_EVALUATOR = 'CLEAR_DATA_EVALUATOR';
 
 export const REQUEST_DELETE_EVALUATOR = 'REQUEST_DELETE_EVALUATOR';
 export const SUCCESS_DELETE_EVALUATOR = 'SUCCESS_DELETE_EVALUATOR';
@@ -59,9 +59,9 @@ export function createEvaluatorErrorAction(error) {
     }
 }
 
-export function createEvaluatorClearDataAction() {
+export function clearDataAction() {
     return {
-        type: CLEAR_DATA_CREATE_EVALUATOR
+        type: CLEAR_DATA_EVALUATOR
     }
 }
 

@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import MainMenu from './components/MainMenu';
-import { TfiTrash, TfiLock, TfiPencilAlt } from "react-icons/tfi";
-import { Form, Button, ListGroup, Table } from 'react-bootstrap';
+import { ListGroup, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as evaluaterActions from '../../redux/user/EvaluatorAction';
-import NewEvaluator from './components/NewEvaluator';
-import DeleteEvaluator from './components/DeleteEvaluator';
+import CreateUpdateEvaluator from './components/evaluators/CreateUpdateEvaluator';
+import DeleteEvaluator from './components/evaluators/DeleteEvaluator';
 
 import '../../layout/css/users-page.css';
 
 const mapStateToPrors = state => {
     return {
-        evaluatorData: state.eval
+        evaluatorData: state.evaluator
     };
 }
 
 function EvaluatorsPage({ evaluatorData, getEvaluatorsAction }) {
 
-    const buttonUpdate = (<Button variant="outline-secondary" className='rounded-circle ms-2'> <TfiPencilAlt /> </Button>);
     const [counter, updateCounter] = useState(0);
 
     useEffect(() => {
@@ -44,7 +42,7 @@ function EvaluatorsPage({ evaluatorData, getEvaluatorsAction }) {
                 <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
                     <h1 className="display-4">Evaluators</h1>
                     <p className="lead">Endava employees who evaluate java job seekers' challenges.</p>
-                    < NewEvaluator refresh={incrementCounter} />
+                    < CreateUpdateEvaluator refresh={incrementCounter} />
                 </div>
                 <div className="container  pb-4">
                     <div className="row">
@@ -87,8 +85,7 @@ function EvaluatorsPage({ evaluatorData, getEvaluatorsAction }) {
                                                             </ListGroup>
                                                         </td>
                                                         <td>
-                                                            {/* <Button variant="outline-secondary" className='rounded-circle ms-2'> <TfiPencilAlt /> </Button> */}
-                                                            <NewEvaluator evaluator={evaluator} refresh={incrementCounter}/>
+                                                            <CreateUpdateEvaluator evaluator={evaluator} refresh={incrementCounter}/>
                                                             <DeleteEvaluator evaluator={evaluator} refresh={incrementCounter}/>
                                                         </td>
                                                     </tr>

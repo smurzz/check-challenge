@@ -3,13 +3,12 @@ import { Modal, Button } from 'react-bootstrap';
 import { TfiTrash } from "react-icons/tfi";
 import { useDispatch, useSelector } from 'react-redux';
 
-import * as evaluatorActions from '../../../redux/user/EvaluatorAction';
+import * as evaluatorActions from '../../../../redux/user/EvaluatorAction';
 
 function DeleteEvaluatorWidget({ evaluator, refresh }) {
     const  email = evaluator.email;
     const fullNameEvaluator = evaluator.firstName + " " + evaluator.lastName;
 
-    const evalData = useSelector(state => state.eval);
     const dispatch = useDispatch();
 
     const deleteEvaluatorHandler = (email) => {

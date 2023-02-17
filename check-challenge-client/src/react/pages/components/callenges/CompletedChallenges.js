@@ -1,36 +1,53 @@
-import React from 'react';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Container } from 'react-bootstrap';
+
+import * as challengesAction from '../../../../redux/challenges/ChallengeAction';
 
 function CompletedChallenges() {
 
+    const chalData = useSelector(state => state.challenge);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(challengesAction.getChallenges());
+    }, [dispatch])
+
     return (
-        <Container className='pb-4'>
 
-            <Card className='mb-3' border='success'>
-            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N7_John_Smith</a></Card.Header>
-                <Card.Body>
-                    <Card.Title>Developer</Card.Title>
-                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenage_N7_John_Smith </Card.Link> 
-                    </Card.Text>
-                    <Button variant="success" disabled>Evaluate</Button>
-                    <Button variant="outline-success" className='ms-3'>View</Button>
-                </Card.Body>
-                <Card.Footer style={{textAlign: "right"}}>Score: <b>4.5</b></Card.Footer>
-            </Card>
+        chalData.error ? (
+            <dev className="d-flex h-100 mx-auto flex-column">
+                <h2 className="display-6 text-center mt-4">{chalData.error}</h2>
+            </dev>
+        ) : (
 
-            <Card className='mb-3' border='success'>
-            <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>Challenage_N11_Yamada_Hanako</a></Card.Header>
-                <Card.Body>
-                    <Card.Title>Java Software Engineer</Card.Title>
-                    <Card.Text> Link to repository: <Card.Link href='#'> https://github.com/challenage_N11_Yamada_Hanako </Card.Link> 
-                    </Card.Text>
-                    <Button variant="success" disabled>Evaluate</Button>
-                    <Button variant="outline-success" className='ms-3'>View</Button>
-                </Card.Body>
-                <Card.Footer style={{textAlign: "right"}}>Score: <b>3.0</b></Card.Footer>
-            </Card>
+            <Container className='pb-4'>
+    
+            {chalData && chalData.challenges && Object.values(chalData.challenges)
+                .filter(challenge => challenge.comleted === true)
+                .map((challenge) => {
+                    const dateCreation = new Date(challenge.created_at);
+                    const dateUpdating = new Date(challenge.updated_at);
+                    const maxScore = 30;
+                    const score = challenge.averageScore ? (challenge.averageScore / maxScore * 5).toFixed(1) : 0;
 
-        </Container>
+                    return <Card className='mb-3' border='success' key={challenge.id}>
+                    <Card.Header as="h5"><a href='#' class="text-dark" style={{ textDecoration: 'none' }}>{challenge.name}</a></Card.Header>
+                    <Card.Body>
+                        <Card.Text> {challenge.description} </Card.Text>
+                        <Card.Title> Link to repository: </Card.Title>
+                        <Card.Text> <Card.Link href={challenge.html_url}> {challenge.html_url} </Card.Link> </Card.Text>
+                        <Card.Text className="text-muted">Created at: {dateCreation.toDateString()} <br />
+                            Updated at: {dateUpdating.toDateString()} </Card.Text>
+                        <Button variant="success" disabled>Evaluate</Button>
+                        <Button variant="outline-success" className='ms-3'>View</Button>
+                    </Card.Body>
+                    <Card.Footer style={{textAlign: "right"}}>Score: <b>{score}</b></Card.Footer>
+                </Card>
+                })
+            }
+
+        </Container>)
     );
 }
 

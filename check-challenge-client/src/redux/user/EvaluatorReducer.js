@@ -52,7 +52,7 @@ export default function userReducer(state = initialState, action) {
                 pending: false,
                 error: action.error
             }
-        case evaluatorActions.CLEAR_DATA_CREATE_EVALUATOR:
+        case evaluatorActions.CLEAR_DATA_EVALUATOR:
             return{
                 ...state,
                 pending: false,
