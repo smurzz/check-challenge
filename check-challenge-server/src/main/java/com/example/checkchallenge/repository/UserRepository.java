@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface UserRepository extends ReactiveMongoRepository<User, String> {  //  ReactiveCrudRepository
+public interface UserRepository extends ReactiveMongoRepository<User, String> {  
     Flux<User> findByFirstName(String firstName);
     Flux<User> findByLastName(String lastName);
     Mono<User> findByEmail(String email);

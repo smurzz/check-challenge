@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -32,10 +33,11 @@ public class UserRequest {
     @Email
     private String email;
 
-    @Size(min = 3, max = 20)
+    @Size(min = 3)
     private String password;
 
     private boolean active;
+    
     private List<UserRole> roles;
 
     public UserRequest(String firstName, String lastName, String position, String email, String password) {
@@ -44,9 +46,6 @@ public class UserRequest {
         this.position = position;
         this.email = email;
         this.password = password;
-        setActive(true);
-        setRoles(List.of(UserRole.USER));
     }
-
 
 }

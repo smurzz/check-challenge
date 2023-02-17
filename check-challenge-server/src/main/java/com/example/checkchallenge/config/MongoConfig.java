@@ -5,6 +5,8 @@ import com.example.checkchallenge.model.UserRole;
 import com.example.checkchallenge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import reactor.core.publisher.Mono;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
@@ -20,22 +22,28 @@ import java.util.Set;
 @Configuration
 @RequiredArgsConstructor
 public class MongoConfig implements CommandLineRunner {
+	
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    
     @Override
     public void run(String... args) throws Exception {
-        // create default admin
-        User defaultAdmin = new User(
-                "",                                // firstName
-                "",                                         // lastname
-                "",                                         // position
-                "admin@admin.com",                          // email
-                passwordEncoder.encode("123"),  // password
-                true,                                       // active
-                List.of(UserRole.ADMIN, UserRole.USER)      // roles
-        );
-        userRepository.deleteAll()
-                .then(userRepository.save(defaultAdmin))
-                .thenMany(userRepository.findAll()).subscribe(log::info);
+    	Mono<Long> countMono = userRepository.count();
+        countMono.subscribe(count -> {
+            if (count == 0) {
+                User defaultAdmin = new User(
+                    "",                                			// firstName
+                    "",                                         // lastname
+                    "",                                         // position
+                    "admin@admin.com",                          // email
+                    passwordEncoder.encode("123"),  			// password
+                    true,                                       // active
+                    List.of(UserRole.ADMIN, UserRole.USER)      // roles
+                );
+                userRepository.save(defaultAdmin).subscribe(savedUser -> {
+                    log.info("Default admin user created.");
+                });
+            }
+        });
     }
 }

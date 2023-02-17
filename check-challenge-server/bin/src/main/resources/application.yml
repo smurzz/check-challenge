@@ -21,12 +21,10 @@ spring:
             host: localhost
             port: 27017
             database: check-challenges-db
-#            username: admin
-#            password: password
-#            authentication-database: admin
+            username: admin
+            password: password
+            authentication-database: admin
             auto-index-creation: true
-github:
-   username: smurzz
 ---
 spring:
     config:

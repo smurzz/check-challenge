@@ -1,17 +1,7 @@
 package com.example.checkchallenge.model;
 
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
-public enum UserRole  {     // implements GrantedAuthority
+
+public enum UserRole  {    
     USER,
     ADMIN;
-
-
-    // private Role role;
-
-//    @Override
-//    public String getAuthority() {
-//        return name();
-//    }
 }

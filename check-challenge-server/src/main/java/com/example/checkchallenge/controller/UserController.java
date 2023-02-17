@@ -34,10 +34,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/")
-    public String home() {
-        return "Hello Docker World";
-    }
+
     @GetMapping("/users")
     public Flux<User> getAllUsers(){
         return this.userRepository.findAll();
@@ -53,6 +50,15 @@ public class UserController {
 
     @PostMapping("/users")
     public Mono<ResponseEntity> insertUser(@Valid @RequestBody UserRequest user){
+    	
+    	if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            user.setRoles(List.of(UserRole.USER));
+        }
+    	
+        if (!user.isActive()) {
+            user.setActive(true);
+        }
+        
         return this.userRepository
                 .save(new User(
                         user.getFirstName(),
@@ -71,12 +77,17 @@ public class UserController {
     
     @PutMapping("/users/{email}")
     public Mono<ResponseEntity> updateUser(@PathVariable String email, @Valid @RequestBody UserRequest user){
+    	
     	return this.userRepository.findByEmail(email)
     			.flatMap(existingUser -> {
+    				String newPass = user.getPassword();
+    				String oldPass = existingUser.getPassword();
+    				String encodedPass = newPass == oldPass ? oldPass : this.passwordEncoder.encode(newPass);
+    				
     				existingUser.setFirstName(user.getFirstName());
     				existingUser.setLastName(user.getLastName());
     				existingUser.setPosition(user.getPosition());
-    				existingUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
+    				existingUser.setPassword(encodedPass);
     				existingUser.setActive(user.isActive());
     				existingUser.setRoles(user.getRoles());
     				return userRepository.save(existingUser);

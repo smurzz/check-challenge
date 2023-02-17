@@ -20,6 +20,7 @@ public class WebConfig {
     WebClient webClient() {
 
         return WebClient.builder()
+        		.baseUrl("https://api.github.com")
                 .filters(exchangeFilterFunctions -> {
                     exchangeFilterFunctions.add(logRequest());
                     exchangeFilterFunctions.add(logResponse());
