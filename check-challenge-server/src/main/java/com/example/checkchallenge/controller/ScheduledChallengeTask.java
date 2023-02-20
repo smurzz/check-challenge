@@ -1,5 +1,6 @@
 package com.example.checkchallenge.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +14,16 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ScheduledChallengeTask {
 	
+	@Value("${github.username}")
+	private String username;
+	
 	private final ChallengeService challengeService;
     private final ChallengeRepository challengeRepository;
 
     @Scheduled(fixedRate = 3600000) // an hour
     public void updateChallengesRepositories() {
     	 challengeService
-	    	 .getChallenges()
+	    	 .getChallenges(username)
 	         .flatMap(challenge -> challengeRepository.findById(challenge.getId())
 	             .flatMap(existingChallenge -> Mono.empty())
 	             .switchIfEmpty(challengeRepository.save(challenge))

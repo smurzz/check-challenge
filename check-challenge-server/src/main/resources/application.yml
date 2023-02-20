@@ -41,3 +41,5 @@ spring:
             password: password
             authentication-database: admin
             auto-index-creation: true
+github:
+   username: smurzz
