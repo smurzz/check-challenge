@@ -69,5 +69,16 @@ public class EvaluationTest {
 		assertEquals(challenge, evaluation.getChallenge());
 		assertEquals(user, evaluation.getUser());
 	}
+	
+	@Test
+	public void testToString() {		
+		String result = "Evaluation(id=null, implementationCriteria=1, algorithmicCriteria=2, structureCriteria=2, errorHandlingCriteria=1, "
+				+ "formattingCriteria=2, commitHistoryCriteria=1, readmeCriteria=3, testQualityCriteria=1, designPatternsCriteria=2, "
+				+ "stylingCriteria=2, ciCdCriteria=1, dockerCriteria=1, challenge=null, user=null, score=19, maxScore=30)";
+		
+		Evaluation evaluation = new Evaluation(1, 2, 2, 1, 2, 1, 3, 1, 2, 2, 1, 1, null, null);
+        assertNotNull(evaluation);
+        assertEquals(result, evaluation.toString());
+	}
 
 }

@@ -41,6 +41,20 @@ public class UserTest {
     }
 	
 	@Test
+    public void testConstructor3() {
+        User user = new User("1", "Jeffrey", "Smith", "Developer", "jeffreysmith@example.com", "123", false, List.of(UserRole.ADMIN, UserRole.USER));
+        assertNotNull(user);
+        assertEquals("1", user.getId());
+        assertEquals("Jeffrey", user.getFirstName());
+        assertEquals("Smith", user.getLastName());
+        assertEquals("Developer", user.getPosition());
+        assertEquals("jeffreysmith@example.com", user.getEmail());
+        assertEquals("123", user.getPassword());
+        assertEquals(false, user.isActive());
+        assertEquals(List.of(UserRole.ADMIN, UserRole.USER), user.getRoles());
+    }
+	
+	@Test
     public void testGettersAndSetters() {
         User user = new User();
         user.setId("1");
@@ -61,6 +75,17 @@ public class UserTest {
         assertEquals(true, user.isActive());
         assertEquals(List.of(UserRole.ADMIN, UserRole.USER), user.getRoles());
     }
+	
+	@Test
+	public void testToString() {		
+		String result = "User(id=1, firstName=Jeffrey, lastName=Smith, position=Developer, "
+				+ "email=jeffreysmith@example.com, password=123, "
+				+ "active=false, roles=[ADMIN, USER])";
+		
+		User user = new User("1", "Jeffrey", "Smith", "Developer", "jeffreysmith@example.com", "123", false, List.of(UserRole.ADMIN, UserRole.USER));
+        assertNotNull(user);
+        assertEquals(result, user.toString());
+	}
 	
 	@Test
     public void testGetAuthorities() {

@@ -3,6 +3,7 @@ package com.example.checkchallenge.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,18 @@ public class ChallengeTest {
 	}
 	
 	@Test
+	public void testToString() {		
+		String result = "Challenge(id=1, name=Challenge1, html_url=https://github.com/users/user/repos/challenge1, description=description, "
+				+ "created_at=2011-11-12T04:16:42Z, updated_at=2011-11-12T04:16:42Z, "
+				+ "comleted=false, inProcessing=false, unevaluated=true, evaluationsInfo=null, averageScore=0.0)";
+		
+		Challenge challenge = new Challenge("1", "Challenge1", "https://github.com/users/user/repos/challenge1", "description", 
+				"2011-11-12T04:16:42Z", "2011-11-12T04:16:42Z", false, false, true, null, 0.0);
+        assertNotNull(challenge);
+        assertEquals(result, challenge.toString());
+	}
+	
+	@Test
 	public void countAverageScoreTest() {
 		int maxValue = 50;
 	
@@ -79,7 +92,7 @@ public class ChallengeTest {
 		challenge2.setAverageScore(17);
 		assertEquals(challenge2.getAverageScore(), challenge2.countAverageScore(maxValue));
 		
-		Map<String, Integer> evaluationsInfo2 = Map.of("evalId1", 84, "evalId2", 15);
+		Map<String, Integer> evaluationsInfo2 = Map.of("evalId1", 94, "evalId2", 15);
 		challenge2.setEvaluationsInfo(evaluationsInfo2);
 		challenge2.setAverageScore(challenge2.countAverageScore(maxValue));
 		assertEquals(maxValue, challenge2.countAverageScore(maxValue));
