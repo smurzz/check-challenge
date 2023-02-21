@@ -79,6 +79,11 @@ public class ChallengeTest {
 		challenge2.setAverageScore(17);
 		assertEquals(challenge2.getAverageScore(), challenge2.countAverageScore(maxValue));
 		
+		Map<String, Integer> evaluationsInfo2 = Map.of("evalId1", 84, "evalId2", 15);
+		challenge2.setEvaluationsInfo(evaluationsInfo2);
+		challenge2.setAverageScore(challenge2.countAverageScore(maxValue));
+		assertEquals(maxValue, challenge2.countAverageScore(maxValue));
+		
 	}
 
 }

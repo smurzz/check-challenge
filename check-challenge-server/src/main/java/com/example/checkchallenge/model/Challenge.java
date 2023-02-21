@@ -47,6 +47,6 @@ public class Challenge {
 	
 	public double countAverageScore(int maxScore) {
 		double average = !evaluationsInfo.isEmpty() ? evaluationsInfo.values().stream().mapToInt(Integer::intValue).average().orElse(0.0) : 0.0;
-		return average > maxScore ? 30.0 : average;
+		return average > maxScore ? maxScore : average;
 	}
 }
