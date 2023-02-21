@@ -24,9 +24,8 @@ public class ScheduledChallengeTask {
     public void updateChallengesRepositories() {
     	 challengeService
 	    	 .getChallenges(username)
-	         .flatMap(challenge -> challengeRepository.findById(challenge.getId())
-	             .flatMap(existingChallenge -> Mono.empty())
-	             .switchIfEmpty(challengeRepository.save(challenge))
+	         .flatMap(challenge -> challengeRepository.existsById(challenge.getId())
+	        		 .flatMap(exists -> exists ? Mono.empty() : challengeRepository.save(challenge))
 	         )
 	         .subscribe();	
     }
