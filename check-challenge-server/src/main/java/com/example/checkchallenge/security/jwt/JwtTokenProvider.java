@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,16 +29,20 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "roles";
 
-    @Autowired
-    JwtProperties jwtProperties;
+    @Value("${jwt.secretKey}")
+    private String secretKey;
+	
+	@Value("${jwt.validityInMs}")
+    private long validityInMs;
 
     @Autowired
     UserRepository userRepository;
-    private SecretKey secretKey;
+    private SecretKey secretKeyValue;
+    
     @PostConstruct
     protected void init() {
-        var secret = Base64.getEncoder().encodeToString(jwtProperties.getSecretKey().getBytes());
-        secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        var secret = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        secretKeyValue = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
     public String createTokenFromAuthentication(Authentication authentication) {
         String email = authentication.getName();
@@ -57,13 +62,13 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtProperties.getValidityInMs()))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .setExpiration(new Date((new Date()).getTime() + validityInMs))
+                .signWith(secretKeyValue, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build()
+        Claims claims = Jwts.parserBuilder().setSigningKey(secretKeyValue).build()
                 .parseClaimsJws(token)
                 .getBody();
         Collection<? extends GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(claims.get(AUTHORITIES_KEY).toString());
@@ -72,7 +77,7 @@ public class JwtTokenProvider {
     }
     public boolean validateToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build()
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKeyValue).build()
                     .parseClaimsJws(token);
             if (claims.getBody().getExpiration().before(new Date())) {
                 return false;

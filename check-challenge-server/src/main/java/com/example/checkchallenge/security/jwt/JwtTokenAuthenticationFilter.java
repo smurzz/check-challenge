@@ -13,8 +13,10 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class JwtTokenAuthenticationFilter implements WebFilter {
+	
     public static final String HEADER_PREFIX = "Bearer ";
     private final JwtTokenProvider tokenProvider;
+    
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String token = resolveToken(exchange.getRequest());

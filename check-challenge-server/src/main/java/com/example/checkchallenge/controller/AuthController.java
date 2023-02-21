@@ -41,7 +41,6 @@ public class AuthController {
     private HashMap<String, String> refreshTokenData = new HashMap<>();
     private final JwtTokenProvider tokenProvider;
     private final ReactiveAuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
     private final UserController userController;
 
     @PostMapping("/login")
@@ -70,10 +69,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public Mono<ResponseEntity> registerUser(@Valid @RequestBody RegisterRequest registerRequest){
-//        User user = new User(rRequest.getFirstName(), rRequest.getLastName(), rRequest.getPosition(),
-//                rRequest.getEmail(), this.passwordEncoder.encode(rRequest.getPassword()));
-//        user.setRoles(List.of(UserRole.USER));
-//        user.setActive(true);
         UserRequest userRequest1 = new UserRequest(
                 registerRequest.getFirstName(),
                 registerRequest.getLastName(),

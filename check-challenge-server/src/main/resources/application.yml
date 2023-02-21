@@ -1,45 +1,46 @@
 logging:
-    level:
-        org:
-            springframework:
-                data:
-                    mongodb:
-                        core:
-                            ReactiveMongoTemplate: DEBUG
-                web:
-                    cors:
-                        reactive:
-                            DefaultCorsProcessor: DEBUG
-server:
-    port: 1453
-spring:
-    config:
-        activate:
-            on-profile: default
-    data:
-        mongodb:
-            host: localhost
-            port: 27017
-            database: check-challenges-db
-#            username: admin
-#            password: password
-#            authentication-database: admin
-            auto-index-creation: true
+   level:
+      org:
+         springframework:
+            data:
+               mongodb:
+                  core:
+                     ReactiveMongoTemplate: DEBUG
+            web:
+               cors:
+                  reactive:
+                     DefaultCorsProcessor: DEBUG
 github:
    username: smurzz
+jwt:
+   secretKey: sUBTuDo0SsnbxJKKRDxlqaddTLjJTu1c
+   validityInMs: 3600000
+server:
+   port: 1453
+spring:
+   config:
+      activate:
+         on-profile: default
+   data:
+      mongodb:
+         host: localhost
+         port: 27017
+         database: check-challenges-db
+#        username: admin
+#        password: password
+#        authentication-database: admin
+         auto-index-creation: true
 ---
 spring:
-    config:
-        activate:
-            on-profile: docker
-    data:
-        mongodb:
-            host: mongo
-            port: 27017
-            database: check-challenges-db
-            username: admin
-            password: password
-            authentication-database: admin
-            auto-index-creation: true
-github:
-   username: smurzz
+   config:
+      activate:
+         on-profile: docker
+   data:
+      mongodb:
+         host: mongo
+         port: 27017
+         database: check-challenges-db
+         username: admin
+         password: password
+         authentication-database: admin
+         auto-index-creation: true
