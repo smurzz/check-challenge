@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.service.annotation.PutExchange;
 
+import com.example.checkchallenge.controller.request.ChallengeRequest;
 import com.example.checkchallenge.controller.request.UserRequest;
 import com.example.checkchallenge.model.Challenge;
 import com.example.checkchallenge.model.Evaluation;
@@ -48,14 +49,14 @@ public class ChallengeController {
     }
     
     @PutMapping("/challenges/{id}")
-    public Mono<ResponseEntity> updateChallenge(@PathVariable String id, @Valid @RequestBody Challenge challenge){ 
+    public Mono<ResponseEntity> updateChallenge(@PathVariable String id, @Valid @RequestBody ChallengeRequest challengeRequest){ 
     	 return this.challengeRepository.findById(id)
          		.flatMap(existingChallenge -> {
-         			
-         			existingChallenge.setDescription(challenge.getDescription());
-         			existingChallenge.setInProcessing(challenge.isInProcessing());
-         			existingChallenge.setUnevaluated(challenge.isUnevaluated());
-         			existingChallenge.setComleted(challenge.isComleted());
+         			existingChallenge.setName(challengeRequest.getName());
+         			existingChallenge.setDescription(challengeRequest.getDescription());
+         			existingChallenge.setInProcessing(challengeRequest.isInProcessing());
+         			existingChallenge.setUnevaluated(challengeRequest.isUnevaluated());
+         			existingChallenge.setComleted(challengeRequest.isComleted());
          			return challengeRepository.save(existingChallenge); 
          		})
          		.map(res ->new ResponseEntity(HttpStatus.NO_CONTENT))
