@@ -82,7 +82,7 @@ public class UserController {
     			.flatMap(existingUser -> {
     				String newPass = user.getPassword();
     				String oldPass = existingUser.getPassword();
-    				String encodedPass = newPass == oldPass ? oldPass : this.passwordEncoder.encode(newPass);
+    				String encodedPass = newPass.equals(oldPass) ? oldPass : this.passwordEncoder.encode(newPass);
     				
     				existingUser.setFirstName(user.getFirstName());
     				existingUser.setLastName(user.getLastName());
