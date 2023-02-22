@@ -1,5 +1,6 @@
 package com.example.checkchallenge.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -8,6 +9,7 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -68,14 +70,15 @@ public class ScheduledChallengeTaskTest {
 		challenge2.setComleted(false);
 		
 		when(challengeService.getChallenges(username)).thenReturn(Flux.just(challenge1, challenge2));
-		when(challengeRepository.findById(challenge1.getId())).thenReturn(Mono.just(challenge1));
-		when(challengeRepository.findById(challenge2.getId())).thenReturn(Mono.empty());
-		when(challengeRepository.save(challenge1)).thenReturn(Mono.just(challenge1));
-		when(challengeRepository.save(challenge2)).thenReturn(Mono.just(challenge2));
+		when(challengeRepository.existsById(challenge1.getId())).thenReturn(Mono.just(true));
+	    when(challengeRepository.existsById(challenge2.getId())).thenReturn(Mono.just(false));
+		when(challengeRepository.save(challenge2)).thenReturn(Mono.just(challenge2));		
 		
 		scheduledChallengeTask.updateChallengesRepositories();
 		
-		verify(challengeRepository, times(2)).save(any(Challenge.class));
+		ArgumentCaptor<Challenge> challengeCaptor = ArgumentCaptor.forClass(Challenge.class);
+	    verify(challengeRepository, times(1)).save(challengeCaptor.capture());
+	    assertThat(challengeCaptor.getValue()).isEqualTo(challenge2);
     }
 
 }
