@@ -10,13 +10,13 @@ logging:
                cors:
                   reactive:
                      DefaultCorsProcessor: DEBUG
+server:
+   port: 1453
 github:
    username: smurzz
 jwt:
    secretKey: sUBTuDo0SsnbxJKKRDxlqaddTLjJTu1c
    validityInMs: 3600000
-server:
-   port: 1453
 spring:
    config:
       activate:
