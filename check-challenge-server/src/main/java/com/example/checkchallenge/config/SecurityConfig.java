@@ -1,8 +1,16 @@
 package com.example.checkchallenge.config;
 
+import com.example.checkchallenge.config.deserializer.GrantedAuthorityDeserializer;
+import com.example.checkchallenge.config.deserializer.UserRoleDeserializer;
+import com.example.checkchallenge.config.serializer.GrantedAuthoritySerializer;
+import com.example.checkchallenge.config.serializer.UserRoleSerializer;
+import com.example.checkchallenge.model.UserRole;
 import com.example.checkchallenge.repository.UserRepository;
 import com.example.checkchallenge.security.jwt.JwtTokenAuthenticationFilter;
 import com.example.checkchallenge.security.jwt.JwtTokenProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +18,7 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,6 +82,18 @@ public class SecurityConfig {
         var authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
         authenticationManager.setPasswordEncoder(passwordEncoder);
         return authenticationManager;
+    }
+    
+    @Bean
+    ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(UserRole.class, new UserRoleSerializer());
+        module.addDeserializer(UserRole.class, new UserRoleDeserializer());
+        module.addSerializer(GrantedAuthority.class, new GrantedAuthoritySerializer());
+        module.addDeserializer(GrantedAuthority.class, new GrantedAuthorityDeserializer());
+        objectMapper.registerModule(module);
+        return objectMapper;
     }
 
     public CorsConfigurationSource createCorsConfigSource() {
