@@ -24,9 +24,8 @@ public class ValidationHandler {
         var errors = e
                 .getFieldErrors()
                 .stream()
-                .map(fieldError -> new String( fieldError.getField() + ": " + fieldError.getDefaultMessage())) // new Error(fieldError.getField(), fieldError.getDefaultMessage()))
+                .map(fieldError -> new String( fieldError.getField() + ": " + fieldError.getDefaultMessage()))
                 .collect(Collectors.toList()).toString();
-        // return ResponseEntity.badRequest().body(errors);
         return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, errors));
     }
 

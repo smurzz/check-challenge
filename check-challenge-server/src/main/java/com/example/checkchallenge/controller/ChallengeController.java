@@ -33,7 +33,6 @@ import reactor.core.publisher.Mono;
 public class ChallengeController {
 	
 	private final ChallengeRepository challengeRepository;
-	private final EvaluationRepository evaluationRepository;
 	
     @GetMapping("/challenges")
     public Flux<Challenge> getAllChallenges(){

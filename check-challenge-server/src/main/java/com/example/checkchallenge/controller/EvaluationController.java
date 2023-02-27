@@ -75,8 +75,7 @@ public class EvaluationController {
                             		.subscribe();
 						    })
 							.map(res -> new ResponseEntity<>(HttpStatus.CREATED))
-							.onErrorResume(IllegalArgumentException.class,
-									error -> Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+							.onErrorResume(error -> Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
 											"Error by creating evaluation")));
 				});
 	}

@@ -38,7 +38,7 @@ import static java.util.stream.Collectors.joining;
 @RequiredArgsConstructor
 @Validated
 public class AuthController {
-    private HashMap<String, String> refreshTokenData = new HashMap<>();
+    private final HashMap<String, String> refreshTokenData;
     private final JwtTokenProvider tokenProvider;
     private final ReactiveAuthenticationManager authenticationManager;
     private final UserController userController;

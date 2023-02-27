@@ -27,7 +27,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-// @AllArgsConstructor
 @RestController
 @RequiredArgsConstructor
 public class UserController {

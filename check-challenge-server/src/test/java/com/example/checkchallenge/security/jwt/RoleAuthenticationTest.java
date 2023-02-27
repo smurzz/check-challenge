@@ -16,9 +16,6 @@ class RoleAuthenticationTest {
     @Autowired
     private WebTestClient webTestClient;
 
-//    @MockBean
-//    private UserRepository userRepository;
-
     @Test
     @WithMockUser(username = "admin@admin", roles = {"ADMIN"})
     void testUserAccess() {
