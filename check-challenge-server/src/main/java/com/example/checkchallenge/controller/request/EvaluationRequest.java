@@ -3,12 +3,16 @@ package com.example.checkchallenge.controller.request;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class EvaluationRequest {
 	
 	private String implementationCriteria;
