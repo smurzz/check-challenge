@@ -28,5 +28,5 @@ export async function refreshTokenIfExpired () {
 export const checkIfTokenIsExpired = () => {
     let sessionData = JSON.parse(localStorage.getItem('userSession'));
     let expireAt = sessionData.user.exp;
-    return /* Date.now() >= expireAt * 1000; */ true;
+    return  Date.now() >= expireAt * 1000; /* true */ ;
 };

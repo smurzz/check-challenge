@@ -5,17 +5,16 @@ import { TfiPencilAlt } from "react-icons/tfi";
 
 import * as evaluatorActions from '../../../../redux/user/EvaluatorAction';
 
-function CreateUpdateEvaluator({ refresh, evaluator }) {     
+function CreateUpdateEvaluator({ refresh, evaluator }) {
 
     const [show, setShow] = useState(false);
     const [success, setSuccess] = useState(false);
     const [user, setUser] = useState(evaluator || {});
     const evalData = useSelector(state => state.evaluator);
     const dispatch = useDispatch();
-    const userRoles = ["ADMIN", "USER"];
+    const userRoles = [{ name: "USER" }, { name: "ADMIN" }];
     var content;
-    var tmpRoles = new Set();
-
+    
     useEffect(() => {
         setUser(evaluator || {});
     }, [evaluator]);
@@ -42,17 +41,22 @@ function CreateUpdateEvaluator({ refresh, evaluator }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        evaluator ? editEvaluator(evaluator.email, user) : createEvaluator(user);
+        const userRequest = (evaluator && (({ id, authorities, ...rest }) => rest)(user)) || {};
+        evaluator ? editEvaluator(userRequest.email, userRequest) : createEvaluator(user);
         success ? setUser({}) : setUser(user);
     }
-    
+
     const handleAddRoles = async (e) => {
-        if (e.target.checked) {
-            tmpRoles.add(e.target.value);
-        } else if (tmpRoles.has(e.target.value) && !e.target.checked) {
-            tmpRoles.delete(e.target.value);
+        let updatedRoles = user.roles ? [...user.roles] : [];
+        let isRolesEmpty = updatedRoles.length === 0;
+        let rolesHasValue = updatedRoles.some(r => r.name !== e.target.value);
+
+        if (e.target.checked && (isRolesEmpty || rolesHasValue)) {
+            updatedRoles.push({ name: e.target.value });
+        } else {
+            updatedRoles = updatedRoles.filter(r => r.name !== e.target.value);
         }
-        user.roles = Array.from(tmpRoles);
+        setUser({ ...user, roles: updatedRoles });
     }
 
     const errorMessage = evalData.error && (
@@ -69,14 +73,14 @@ function CreateUpdateEvaluator({ refresh, evaluator }) {
         <Button variant="success" onClick={handleShow}>Add evaluater</Button>
     );
 
-    if(evalData.status === 201) {
+    if (evalData.status === 201) {
         content = <Alert className="text-center m-4" key='success' variant='success'>
             <h1 className="cover-heading">
                 The evaluater is successfully created!
             </h1>
             <Button variant="success" onClick={handleClose}>Close</Button>
         </Alert>
-    } else if(evalData.status === 204) {
+    } else if (evalData.status === 204) {
         content = <Alert className="text-center m-4" key='success' variant='success'>
             <h1 className="cover-heading">
                 The changes are successfuly saved!
@@ -145,17 +149,18 @@ function CreateUpdateEvaluator({ refresh, evaluator }) {
 
                 <Form.Label><b>Role Account Information</b></Form.Label>
                 {userRoles.map((role) => (
-                    <div key={role} className="mb-2">
+                    <div key={role.name} className="mb-2">
                         <Form.Check
                             className="mb-2"
                             type='checkbox'
-                            label={role}
-                            value={role}
-                            checked={(user.roles && user.roles.includes(role)) || null}
+                            label={role.name}
+                            value={role.name}
+                            checked={(user.roles && user.roles.some(r => r.name === role.name)) || false}
                             onChange={handleAddRoles}
                         />
                     </div>
                 ))}
+
             </Form>
             <Modal.Footer className="justify-content-center align-items-center">
                 <Button

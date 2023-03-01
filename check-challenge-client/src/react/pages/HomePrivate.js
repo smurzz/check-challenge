@@ -1,9 +1,9 @@
 import React from 'react';
 import MainMenu from './components/MainMenu';
-import AllChallenges from './components/callenges/AllChallenges';
-import InProcessingChallenges from './components/callenges/InProcessingChallenges';
-import CompletedChallenges from './components/callenges/CompletedChallenges';
-import UnevaluatedChallenges from './components/callenges/UnevaluatedChallenges';
+import AllChallenges from './components/challenges/AllChallenges';
+import InProcessingChallenges from './components/challenges/InProcessingChallenges';
+import CompletedChallenges from './components/challenges/CompletedChallenges';
+import UnevaluatedChallenges from './components/challenges/UnevaluatedChallenges';
 
 import { Container, Tab, Tabs } from 'react-bootstrap';
 import '../../layout/css/home-page.css'

@@ -17,9 +17,10 @@ const initialState = {};
 const middlewares = [thunk];
 
 const store = createStore(rootReducer, initialState, compose(applyMiddleware(...middlewares)));
-
-axios.defaults.baseURL = 'http://localhost:1453/';
-
+// local (default) usage
+// axios.defaults.baseURL = 'http://localhost:1453/';
+// docker usage
+axios.defaults.baseURL = 'http://localhost:8080/';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const LoadingIndicator = props => {

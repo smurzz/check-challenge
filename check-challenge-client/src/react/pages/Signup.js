@@ -1,9 +1,11 @@
 import MainMenu from './components/MainMenu';
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux';
 import { Button, Form, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import * as authenticationActions from '../../redux/authentication/AuthenticationAction';
+import * as evaluatorActions from '../../redux/user/EvaluatorAction';
 
 import '../../layout/css/register-form.css'
 
@@ -13,6 +15,7 @@ const mapStateToPrors = state => {
 }
 
 function Signup(props) {
+    const dispatch = useDispatch();
 
     var formContent;
     var generalErrorMessage;
@@ -32,6 +35,7 @@ function Signup(props) {
     const [validMatch, setValidMatch] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    const clearEvalData = () => dispatch(evaluatorActions.clearDataAction());
 
     useEffect(() => {
         const match = password === matchPass;
@@ -67,6 +71,7 @@ function Signup(props) {
             email: "",
             password: ""
         }) : setUser(user);
+        clearEvalData();
     }
 
     if (!validMatch) {
@@ -92,7 +97,7 @@ function Signup(props) {
             type="text"
             name='firstName'
             placeholder="First name*"
-            onChange={async (e) => { setUser({ ...user, firstName: e.target.value }); setError(false) }}
+            onChange={async (e) => { setUser({ ...user, firstName: e.target.value }) }}
             required
             autoFocus />
         <Form.Control
@@ -100,34 +105,34 @@ function Signup(props) {
             type="text"
             name='lastName'
             placeholder="Last name*"
-            onChange={async (e) => { setUser({ ...user, lastName: e.target.value }); setError(false) }}
+            onChange={async (e) => { setUser({ ...user, lastName: e.target.value }) }}
             required />
         <Form.Control
             className="form-control"
             type="text"
             name='position'
             placeholder="Position"
-            onChange={async (e) => { setUser({ ...user, position: e.target.value }); setError(false) }} />
+            onChange={async (e) => { setUser({ ...user, position: e.target.value }) }} />
         <Form.Control
             className="form-control"
             type="email"
             name='email'
             placeholder="Email*"
-            onChange={async (e) => { setUser({ ...user, email: e.target.value }); setError(false) }}
+            onChange={async (e) => { setUser({ ...user, email: e.target.value }) }}
             required />
         <Form.Control
             className="form-control"
             type="password"
             name='password'
             placeholder="Password*"
-            onChange={async (e) => { setUser({ ...user, password: e.target.value }); setPassword(e.target.value); setError(false) }}
+            onChange={async (e) => { setUser({ ...user, password: e.target.value }); setPassword(e.target.value) }}
             required />
         <Form.Control
             className="form-control"
             type="password"
             name='matchPass'
             placeholder="Password again*"
-            onChange={(e) => { setMatchPass(e.target.value); setError(false) }}
+            onChange={(e) => { setMatchPass(e.target.value) }}
             aria-invalid={validMatch ? "false" : "true"}
             aria-describedby="errorPassMessage"
             required />

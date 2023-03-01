@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
 import { TfiTrash } from "react-icons/tfi";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import * as evaluatorActions from '../../../../redux/user/EvaluatorAction';
 
@@ -16,13 +16,12 @@ function DeleteEvaluatorWidget({ evaluator, refresh }) {
     }
 
     const [show, setShow] = useState(false);
-    const handleClose = (() => { setShow(false) });
+    const handleClose = (() => { setShow(false); refresh(); });
     const handleShow = () => setShow(true);
 
     const handleSubmit = (e) => {
         deleteEvaluatorHandler(email);
-        refresh();
-        setShow(false);
+        handleClose();
     }
 
     return (

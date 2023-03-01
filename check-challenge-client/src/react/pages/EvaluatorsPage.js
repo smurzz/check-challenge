@@ -66,7 +66,7 @@ function EvaluatorsPage({ evaluatorData, getEvaluatorsAction }) {
                                         <tbody >
                                             {evaluatorData && evaluatorData.evaluators && Object.values(evaluatorData.evaluators)
                                                 .map((evaluator, index) => {
-                                                    return <tr key={evaluator.email}>
+                                                    return <tr key={evaluator.id}>
                                                         <td className="pl-4">{index + 1}</td>
                                                         <td>
                                                             <h5 className="font-medium mb-0">{evaluator.firstName} {evaluator.lastName}</h5>
@@ -79,8 +79,8 @@ function EvaluatorsPage({ evaluatorData, getEvaluatorsAction }) {
                                                         </td>
                                                         <td>
                                                             <ListGroup as="ol" numbered>
-                                                                {evaluator.roles.map( (role) => {
-                                                                    return <ListGroup.Item as="li" key={role}>{role}</ListGroup.Item>;
+                                                                {evaluator && evaluator.roles && evaluator.roles.map( (role) => {
+                                                                    return <ListGroup.Item as="li" key={role.name}>{role.name}</ListGroup.Item>;
                                                                 })}
                                                             </ListGroup>
                                                         </td>

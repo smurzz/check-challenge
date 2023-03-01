@@ -1,11 +1,10 @@
 import React from 'react';
-import '../../../layout/css/main-menu.css';
 import { Navbar, Nav, NavDropdown, Form, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import HomePublic from '../HomePublic';
 import { useNavigate } from "react-router-dom";
-import {VscAccount} from 'react-icons/vsc'
+import { VscAccount } from 'react-icons/vsc'
+import '../../../layout/css/main-menu.css';
 
 import * as authenticationActions from '../../../redux/authentication/AuthenticationAction';
 
@@ -19,28 +18,23 @@ function MainMenu(props) {
   const navigate = useNavigate();
 
   const handleLogout = async (e) => {
-    e.preventDefault();    
+    e.preventDefault();
     props.logoutUserAction();
     navigate('/');
   }
 
   if (userSession) {
     var logoutButton = (<Button variant="outline-success me-2" onClick={handleLogout}>Logout</Button>);
-    var myAccontIcon = (<Button variant="secondary" className='rounded-circle me-2'> <VscAccount size={18}/> </Button>);
-   /*  var userGreeting = (<Nav.Link href='#'>Hi, </Nav.Link>) */
+    var myAccontIcon = (<Button variant="secondary" className='rounded-circle me-2'> <VscAccount size={18} /> </Button>);
     var userRoles = userSession.user.roles;
 
     if (userRoles.includes("ADMIN")) {
 
       var linkToUsers = (
-      <NavDropdown title="Users" id="navbarScrollingDropdown">
-        <NavDropdown.Item href="/users">Evaluators</NavDropdown.Item>
-        <NavDropdown.Item href="#action4"> Applicants </NavDropdown.Item>
-        {/* <NavDropdown.Divider />
-        <NavDropdown.Item href="#action5">
-          Something else here
-        </NavDropdown.Item> */}
-      </NavDropdown>
+        <NavDropdown title="Users" id="navbarScrollingDropdown">
+          <NavDropdown.Item href="/users">Evaluators</NavDropdown.Item>
+          <NavDropdown.Item href="#action4"> Applicants </NavDropdown.Item>
+        </NavDropdown>
       );
 
     }
@@ -60,19 +54,9 @@ function MainMenu(props) {
             style={{ maxHeight: '100px' }}
             navbarScroll>
             <Nav.Link href={userSession ? "/home" : "/"}>Home</Nav.Link>
-            {/* <Nav.Link href="/users">Users</Nav.Link> */}
             {linkToUsers}
-            {/*<Nav.Link href="#" disabled>
-            Link
-          </Nav.Link> */}
           </Nav>
           <Form className="d-flex">
-            {/* <Form.Control
-            type="search"
-            placeholder="Search"
-            className="me-2"
-            aria-label="Search"
-          /> */}
             {loginButton}
             {signupButton}
             {myAccontIcon}
