@@ -6,7 +6,7 @@ services:
   app-server:
     # Configuration for building the docker image for the backend service
     build:
-      context: check-challenge-server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      context: ghcr.io/smurzz/check-challenge-app-server:latest # Use an image built from the specified dockerfile in the `polling-app-server` directory.
       dockerfile: Dockerfile
     container_name: app-server
     ports:
@@ -18,14 +18,6 @@ services:
     depends_on: 
       - mongo-express
       - mongo
-#    environment:
-#      SPRING_DATA_MONGODB_HOST: mongo
-#      SPRING_DATA_MONGODB_PORT: 27017
-#      SPRING_DATA_MONGODB_DATABASE: check-challenges-db
-#      SPRING_DATA_MONGODB_USERNAME: admin
-#      SPRING_DATA_MONGODB_PASSWORD: password
-#      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
-#      SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: true
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - backend
       - frontend
@@ -33,7 +25,7 @@ services:
   # Frontend Service 
   app-client:
     build:
-      context: check-challenge-client # Use an image built from the specified dockerfile in the `polling-app-client` directory.
+      context: ghcr.io/smurzz/check-challenge-app-client:latest # Use an image built from the specified dockerfile in the `polling-app-client` directory.
       dockerfile: Dockerfile
       args:
         REACT_APP_API_BASE_URL: http://127.0.0.1:3000
@@ -48,7 +40,7 @@ services:
 
 # Database Service (MongoDB, Mongo-Express)
   mongo:
-    image: mongo
+    image: ghcr.io/smurzz/mongo:latest
     container_name: mongo
     restart: always
     ports:
@@ -62,7 +54,7 @@ services:
     networks:
       - backend
   mongo-express:
-    image: mongo-express
+    image: ghcr.io/smurzz/mongo-express:latest
     container_name: mongo-express
     restart: always
     ports:
@@ -76,7 +68,6 @@ services:
 # Volumes
 volumes:
   challenge-db:
-    # driver: local
     
 # Networks to be created to facilitate communication between containers
 networks:

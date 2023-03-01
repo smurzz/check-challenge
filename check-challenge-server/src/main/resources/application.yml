@@ -31,6 +31,11 @@ spring:
 #        authentication-database: admin
          auto-index-creation: true
 ---
+github:
+   username: smurzz
+jwt:
+   secretKey: sUBTuDo0SsnbxJKKRDxlqaddTLjJTu1c
+   validityInMs: 3600000
 spring:
    config:
       activate:
