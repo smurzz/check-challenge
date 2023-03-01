@@ -1,0 +1,39 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
+      - name: Pull Docker images
+        run: |
+          docker pull ghcr.io/smurzz/check-challenge-app-server:latest
+          docker pull ghcr.io/smurzz/check-challenge-app-client:latest
+          docker pull ghcr.io/smurzz/mongo-express:latest
+          docker pull ghcr.io/smurzz/mongo:latest
+
+      - name: Start services
+        run: |
+          docker-compose up -d
+        working-directory: ./docker-compose.yaml
+
+      - name: Run tests
+        run: |
+          ./mvnw test
+        working-directory: ./check-challenge-server/src/test/java/com/example/checkchallenge/
+
+      - name: Stop services
+        run: |
+          docker-compose down
+        working-directory: ./docker-compose.yaml
