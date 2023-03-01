@@ -21,13 +21,14 @@ jobs:
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
+          projectBaseDir: ./check-challenge-server/
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
-          projectBaseDir: check-challenge-server/
+          projectBaseDir: ./check-challenge-server/
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
