@@ -99,6 +99,10 @@
 			<artifactId>validation-api</artifactId>
 			<version>2.0.1.Final</version>
 		</dependency>
+		<properties>
+			<sonar.organization>test-sonar-organization</sonar.organization>
+			<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		</properties>
 	</dependencies>
 	<build>
 		<plugins>
