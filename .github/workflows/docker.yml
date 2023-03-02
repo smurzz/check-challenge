@@ -1,0 +1,49 @@
+name: Build and push Docker image
+
+on:
+   push:
+      tags:
+      - '*'
+
+jobs:
+   build-and-push:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and push app-server image
+        uses: docker/build-push-action@v2
+        with:
+           context: ./app-server
+           push: true
+           tags: ghcr.io/smurzz/check-challenge-app-server:${{ github.ref }}
+        env:
+           CR_PAT: ${{ secrets.CR_PAT }}
+
+      - name: Build and push app-client image
+        uses: docker/build-push-action@v2
+        with:
+           context: ./app-client
+           push: true
+           tags: ghcr.io/smurzz/check-challenge-app-client:${{ github.ref }}
+        env:
+           CR_PAT: ${{ secrets.CR_PAT }}
+
+      - name: Build and push mongo image
+        uses: docker/build-push-action@v2
+        with:
+           context: ./mongo
+           push: true
+           tags: ghcr.io/smurzz/mongo:${{ github.ref }}
+        env:
+           CR_PAT: ${{ secrets.CR_PAT }}
+
+      - name: Build and push mongo-express image
+        uses: docker/build-push-action@v2
+        with:
+           context: ./mongo-express
+           push: true
+           tags: ghcr.io/smurzz/mongo-express:${{ github.ref }}
+        env:
+           CR_PAT: ${{ secrets.CR_PAT }}
