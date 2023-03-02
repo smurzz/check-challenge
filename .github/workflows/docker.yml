@@ -19,7 +19,7 @@ jobs:
          with:
             context: ./app-server
             push: true
-            tags: ghcr.io/smurzz/check-challenge-app-server:${{ github.ref }}
+            tags: ghcr.io/smurzz/check-challenge-app-server:${{ github.sha }}
          env:
             CR_PAT: ${{ secrets.CR_PAT }}
 
@@ -28,7 +28,7 @@ jobs:
          with:
             context: ./app-client
             push: true
-            tags: ghcr.io/smurzz/check-challenge-app-client:${{ github.ref }}
+            tags: ghcr.io/smurzz/check-challenge-app-client:${{ github.sha }}
          env:
             CR_PAT: ${{ secrets.CR_PAT }}
 
@@ -37,7 +37,7 @@ jobs:
          with:
             context: ./mongo
             push: true
-            tags: ghcr.io/smurzz/mongo:${{ github.ref }}
+            tags: ghcr.io/smurzz/mongo:${{ github.sha }}
          env:
             CR_PAT: ${{ secrets.CR_PAT }}
 
@@ -46,6 +46,6 @@ jobs:
          with:
             context: ./mongo-express
             push: true
-            tags: ghcr.io/smurzz/mongo-express:${{ github.ref }}
+            tags: ghcr.io/smurzz/mongo-express:${{ github.sha }}
          env:
             CR_PAT: ${{ secrets.CR_PAT }}

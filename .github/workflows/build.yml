@@ -40,4 +40,4 @@ jobs:
          run: | 
             cd check-challenge-server
             export MAVEN_OPTS="-Xmx512m"
-            mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage -Dsonar.projectKey=smurzz_check-challenge
+            mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage -Dsonar.projectKey=smurzz_check-challenge -X
