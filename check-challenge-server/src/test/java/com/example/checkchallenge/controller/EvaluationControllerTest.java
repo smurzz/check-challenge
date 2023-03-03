@@ -1,4 +1,4 @@
-package com.example.checkchallenge.repository;
+package com.example.checkchallenge.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -29,6 +29,9 @@ import com.example.checkchallenge.model.Challenge;
 import com.example.checkchallenge.model.Evaluation;
 import com.example.checkchallenge.model.User;
 import com.example.checkchallenge.model.UserRole;
+import com.example.checkchallenge.repository.ChallengeRepository;
+import com.example.checkchallenge.repository.EvaluationRepository;
+import com.example.checkchallenge.repository.UserRepository;
 import com.example.checkchallenge.security.jwt.JwtTokenProvider;
 
 import reactor.core.publisher.Mono;

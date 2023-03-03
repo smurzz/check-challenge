@@ -27,7 +27,7 @@ public class JwtTokenProviderTest {
 	}
 
 	@Test
-	void testCreateTokenFromAuthentication() {
+	void testCreateToken() {
 
 		String email = "test@example.com";
 		String password = "password123";
@@ -35,20 +35,11 @@ public class JwtTokenProviderTest {
 
 		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, authorities);
 
-		String token = jwtTokenProvider.createTokenFromAuthentication(authentication);
+		String token = jwtTokenProvider.createToken(authentication);
 
 		assertNotNull(token);
 		assertTrue(jwtTokenProvider.validateToken(token));
 
-	}
-
-	@Test
-	public void testCreateTokenFromEmail() throws Exception {
-		String email = "admin@admin.com";
-
-		String token = jwtTokenProvider.createTokenFromEmail(email);
-		assertNotNull(token);
-		assertTrue(jwtTokenProvider.validateToken(token));
 	}
 
 }

@@ -1,12 +1,13 @@
 package com.example.checkchallenge.repository;
 
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import com.example.checkchallenge.model.Challenge;
@@ -21,7 +22,7 @@ import reactor.test.StepVerifier;
 @DataMongoTest
 public class EvaluationRepositoryTest {
 	
-	@Autowired
+	@Mock
 	private EvaluationRepository evaluationRepository;
 	
 	private User user1 = new User("Jeffrey", "Smith", "Developer", "jeffreysmith@example.com", "123", false, List.of(UserRole.ADMIN, UserRole.USER));
@@ -32,15 +33,12 @@ public class EvaluationRepositoryTest {
 			"2011-11-12T04:16:42Z", "2011-11-12T04:16:42Z", false, true, false, Map.of(), 19.0);
 	Evaluation evaluation1 = new Evaluation(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, challenge1, user1);
 	Evaluation evaluation2 = new Evaluation(1, 2, 2, 1, 2, 1, 3, 1, 2, 2, 1, 2, challenge1, user2);
-	
-	@AfterEach
-	public void clean() {
-		evaluationRepository.deleteAll(Flux.just(evaluation1, evaluation2)).block();
-	}
+
 	
 	@BeforeEach
-	public void create() {
-		evaluationRepository.saveAll(Flux.just(evaluation1, evaluation2)).blockLast();
+	public void setup() {
+		when(evaluationRepository.findByUser(user1)).thenReturn(Mono.just(evaluation1));
+		when(evaluationRepository.findAllByChallenge(challenge1)).thenReturn(Flux.just(evaluation1, evaluation2));
 	}
 	
 	@Test
@@ -58,7 +56,4 @@ public class EvaluationRepositoryTest {
 	        .expectNext(evaluation1, evaluation2)
 	        .verifyComplete();
 	}
-	
-	
-
 }

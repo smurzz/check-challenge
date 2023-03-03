@@ -1,13 +1,15 @@
 package com.example.checkchallenge.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,19 +22,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.checkchallenge.config.AppConfig;
 import com.example.checkchallenge.config.SecurityConfig;
 import com.example.checkchallenge.controller.request.AuthenticationRequest;
 import com.example.checkchallenge.controller.request.RefreshAuthenticationRequest;
 import com.example.checkchallenge.controller.request.RegisterRequest;
 import com.example.checkchallenge.controller.request.UserRequest;
-import com.example.checkchallenge.controller.request.UserRequest.UserRequestBuilder;
 import com.example.checkchallenge.repository.UserRepository;
 import com.example.checkchallenge.security.jwt.JwtTokenProvider;
 
 import reactor.core.publisher.Mono;
 
 @WebFluxTest(controllers = AuthController.class)
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, AppConfig.class})
 public class AuthControllerTest {
 	
 	 	@Autowired
@@ -61,7 +63,7 @@ public class AuthControllerTest {
             	.thenReturn(Mono.just(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())));
 
 		    String accessToken = "access-token";
-		    when(tokenProvider.createTokenFromAuthentication(any(Authentication.class)))
+		    when(tokenProvider.createToken(any(Authentication.class)))
 		        .thenReturn(accessToken);
 	    	
 	    	webTestClient
@@ -155,19 +157,21 @@ public class AuthControllerTest {
 	    
 	    @Test
 	    void testRefreshSuccess() throws ExecutionException, InterruptedException {
-	    	String email = "test@example.com";
+	    	String accessToken = "0987654321";
 	        String refreshToken = "1234567890";
 
-	        HashMap<String, String> refreshTokenData = new HashMap<>();
-	        refreshTokenData.put(email, refreshToken);
+	        ConcurrentHashMap<String, String> refreshTokenData = new ConcurrentHashMap<>();
+	        refreshTokenData.put(refreshToken, accessToken);
 	    		     
-	        RefreshAuthenticationRequest raRequest = new RefreshAuthenticationRequest(email, refreshToken);
+	        RefreshAuthenticationRequest raRequest = new RefreshAuthenticationRequest("admin@admin.com", refreshToken);
 	        
 	        AuthController authController = new AuthController(refreshTokenData, tokenProvider, authenticationManager, userController);
 	        WebTestClient webTestClient = WebTestClient.bindToController(authController).build();
 
 	        String newToken = "new-token";
-	        when(tokenProvider.createTokenFromEmail(email)).thenReturn(newToken);
+	        Authentication authentication = Mockito.mock(Authentication.class);
+	        when(tokenProvider.getAuthentication(anyString())).thenReturn(authentication);
+	        when(tokenProvider.createToken(authentication)).thenReturn(newToken);
 	        
 	        webTestClient.post()
 	            .uri("/auth/refresh")
@@ -185,7 +189,7 @@ public class AuthControllerTest {
 	        String email = "test@example.com";
 	        String refreshToken = "1234567890";
 
-	        HashMap<String, String> refreshTokenData = new HashMap<>();
+	        ConcurrentHashMap<String, String> refreshTokenData = new ConcurrentHashMap<>();
 	        refreshTokenData.put(email, refreshToken);
 
 	        String wrongRefreshToken = "0987654321";

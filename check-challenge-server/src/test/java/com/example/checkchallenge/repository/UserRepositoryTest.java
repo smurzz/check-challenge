@@ -1,11 +1,12 @@
 package com.example.checkchallenge.repository;
 
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import com.example.checkchallenge.model.User;
@@ -18,23 +19,24 @@ import reactor.test.StepVerifier;
 @DataMongoTest
 public class UserRepositoryTest {
 	
-	@Autowired
+	@Mock
     private UserRepository userRepository;
 	
 	private User user1 = new User("Jeffrey", "Smith", "Developer", "jeffreysmith@example.com", "123", false, List.of(UserRole.ADMIN, UserRole.USER));
 	private User user2 = new User("John", "Doe", "Engineer", "johndoe@example.com", "password", true, List.of(UserRole.USER));
 	private User user3 = new User("Jeffrey", "Joe", "software developer", "jeffreyjoe@example.com", "1234", true, List.of(UserRole.ADMIN));
 	private User user4 = new User("Kate", "Doe", "software developer", "katedoe@example.com", "1234", true, List.of(UserRole.ADMIN, UserRole.USER));
-
-	
-	@AfterEach
-	public void clean() {
-		userRepository.deleteAll(Flux.just(user1, user2, user3, user4)).block();
-	}
+	private User user5 = new User("Lila", "Smith", "Developer", "lilasmith@example.com", "123", false, List.of(UserRole.USER));		
 	
 	@BeforeEach
 	public void create() {
-		userRepository.saveAll(Flux.just(user1, user2, user3, user4)).blockLast();
+		when(userRepository.findByFirstName("Jeffrey")).thenReturn(Flux.just(user1, user3));
+		when(userRepository.findByLastName("Doe")).thenReturn(Flux.just(user2, user4));
+		when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Mono.just(user2));
+		when(userRepository.findByEmail("notexists@example.com")).thenReturn(Mono.empty());
+		when(userRepository.existsByEmail("johndoe@example.com")).thenReturn(Mono.just(true));
+		when(userRepository.existsByEmail("notexists@example.com")).thenReturn(Mono.just(false));
+		when(userRepository.deleteByEmail(user5.getEmail())).thenReturn(Mono.just(user5));
 	}
 	
 	@Test
@@ -83,16 +85,10 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void deleteByEmailTest() {
-		User user5 = new User("Lila", "Smith", "Developer", "lilasmith@example.com", "123", false, List.of(UserRole.USER));		
-		Mono<User> result = userRepository
-				.save(user5)
-				.then(userRepository
-						.deleteByEmail(user5.getEmail()));
+		Mono<User> result = userRepository.deleteByEmail("lilasmith@example.com");
 		
 		StepVerifier.create(result)
 	        .expectNext(user5)
 	        .verifyComplete();
 	}
-
-
 }

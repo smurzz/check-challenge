@@ -3,9 +3,9 @@ name: Build and push Docker image
 on:
    push:
       branches:
-         - main
+      - main
       tags:
-         - '*'
+      - '*'
 
 jobs:
    build-and-push:
@@ -14,10 +14,17 @@ jobs:
       -  name: Checkout code
          uses: actions/checkout@v2
 
+      -  name: Log in to GitHub Container Registry
+         uses: docker/login-action@v1
+         with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
       -  name: Build and push app-server image
          uses: docker/build-push-action@v2
          with:
-            context: .
+            context: check-challenge-server
             push: true
             tags: ghcr.io/smurzz/check-challenge-app-server:${{ github.sha }}
          env:
@@ -26,26 +33,8 @@ jobs:
       -  name: Build and push app-client image
          uses: docker/build-push-action@v2
          with:
-            context: .
+            context: check-challenge-client
             push: true
             tags: ghcr.io/smurzz/check-challenge-app-client:${{ github.sha }}
-         env:
-            CR_PAT: ${{ secrets.CR_PAT }}
-
-      -  name: Build and push mongo image
-         uses: docker/build-push-action@v2
-         with:
-            context: .
-            push: true
-            tags: ghcr.io/smurzz/mongo:${{ github.sha }}
-         env:
-            CR_PAT: ${{ secrets.CR_PAT }}
-
-      -  name: Build and push mongo-express image
-         uses: docker/build-push-action@v2
-         with:
-            context: .
-            push: true
-            tags: ghcr.io/smurzz/mongo-express:${{ github.sha }}
          env:
             CR_PAT: ${{ secrets.CR_PAT }}
