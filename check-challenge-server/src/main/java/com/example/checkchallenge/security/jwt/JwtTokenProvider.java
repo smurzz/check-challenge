@@ -44,19 +44,9 @@ public class JwtTokenProvider {
         var secret = Base64.getEncoder().encodeToString(secretKey.getBytes());
         secretKeyValue = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
-    public String createTokenFromAuthentication(Authentication authentication) {
+    public String createToken(Authentication authentication) {
         String email = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        return createToken(email, authorities);
-    }
-
-    public String createTokenFromEmail(String email) throws ExecutionException, InterruptedException {
-        var user = userRepository.findByEmail(email).toFuture().get();
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-        return createToken(user.getEmail(), authorities);
-    }
-
-    public String createToken(String email, Collection<? extends GrantedAuthority> authorities) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put(AUTHORITIES_KEY, authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(",")));
         return Jwts.builder()
@@ -66,6 +56,23 @@ public class JwtTokenProvider {
                 .signWith(secretKeyValue, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+//    public String createTokenFromEmail(String email) throws ExecutionException, InterruptedException {
+//        var user = userRepository.findByEmail(email).toFuture().get();
+//        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+//        return createToken(user.getEmail(), authorities);
+//    }
+//
+//    public String createToken(String email, Collection<? extends GrantedAuthority> authorities) {
+//        Claims claims = Jwts.claims().setSubject(email);
+//        claims.put(AUTHORITIES_KEY, authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(",")));
+//        return Jwts.builder()
+//                .setClaims(claims)
+//                .setIssuedAt(new Date())
+//                .setExpiration(new Date((new Date()).getTime() + validityInMs))
+//                .signWith(secretKeyValue, SignatureAlgorithm.HS256)
+//                .compact();
+//    }
 
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(secretKeyValue).build()
