@@ -2,6 +2,9 @@
 
 This Spring Boot webflux application streamlines the evaluation process of technical tasks submitted by Java developer applicants. IT companies can create a private GitHub repository for each applicant, which they can access with push, pull, and commit privileges. The application evaluates the tasks based on specified criteria and stores the results in a MongoDB database along with information about evaluators and tasks. It provides an efficient and user-friendly way for IT companies to evaluate Java developer applicants and select the best candidates for their teams.
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=smurzz_check-challenge&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=smurzz_check-challenge)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=smurzz_check-challenge&metric=coverage)](https://sonarcloud.io/summary/new_code?id=smurzz_check-challenge)
+
 ## Installation
 
 ### Method 1: Local Installation
