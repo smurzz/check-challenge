@@ -38,10 +38,11 @@ services:
 # Database Service (MongoDB, Mongo-Express)
   mongo:
     image: ghcr.io/smurzz/mongo:latest
+    command: mongod --port 27018
     container_name: mongo
     restart: always
     ports:
-      - "27018:27017"
+      - "27018:27018"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
@@ -59,7 +60,7 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      ME_CONFIG_MONGODB_URL: "mongodb://admin:password@mongo:27017/"
+      ME_CONFIG_MONGODB_URL: "mongodb://admin:password@mongo:27018/"
     networks:
       - backend
 # Volumes
