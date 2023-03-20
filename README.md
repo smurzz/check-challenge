@@ -14,8 +14,7 @@ To run the application locally, follow these steps:
 1. Clone the repository to your local machine.
 2. In a terminal, navigate to the `cd check-challenge/check-challenge-server` folder and run **mvn clean install** and **mvn spring-boot:run**. This will start the server and connect it to your local MongoDB instance.
 3. In another terminal, navigate to the `cd check-challenge/check-challenge-client` folder and run **npm install** and **npm start**. This will start the frontend on http://localhost:3000.
-4. Open `check-challenge\check-challenge-client\src\index.js`, uncomment the line 21 and comment out the line 23 (server port change from 8080 to 1453).
-6. Open your web browser and go to http://localhost:3000 to access the application.
+4. Open your web browser and go to http://localhost:3000 to access the application.
 
 ### Method 2: Docker Installation
 
