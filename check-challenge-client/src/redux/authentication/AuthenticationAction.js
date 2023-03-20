@@ -104,8 +104,7 @@ export function signupUser(user) {
                 dispatch(getSignupSuccessAction(response))
             })
             .catch(error => {
-                console.log(error);
-                const errorMessage = error.response.data.message;
+                const errorMessage = error.response.data;
                 dispatch(getSignupErrorAction(errorMessage));
             })
 

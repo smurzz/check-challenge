@@ -149,7 +149,7 @@ export function createEvaluator(evaluators) {
                         dispatch(createEvaluatorSuccessAction(response));
                     })
                     .catch(error => {
-                        errorMessage = error.response.data.message;
+                        errorMessage = error.response.data;
                         dispatch(createEvaluatorErrorAction(errorMessage));
                     })
             })
@@ -179,7 +179,7 @@ export function deleteEvaluator(evaluatorID) {
                     dispatch(action);
                 })
                 .catch(error => {
-                    errorMessage = error.response.data.message;
+                    errorMessage = error.message;
                     dispatch(deleteEvaluatorErrorAction(errorMessage));
                 })
         })
@@ -211,7 +211,7 @@ export function editEvaluator(evaluatorID, evaluator) {
                         dispatch(action);
                     })
                     .catch(error => {
-                        errorMessage = error.response.data.message;
+                        errorMessage = error.response.data;
                         dispatch(editEvaluatorErrorAction(errorMessage));
                     })
             })

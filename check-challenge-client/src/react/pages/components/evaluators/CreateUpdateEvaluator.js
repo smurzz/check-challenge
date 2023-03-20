@@ -61,7 +61,7 @@ function CreateUpdateEvaluator({ refresh, evaluator }) {
 
     const errorMessage = evalData.error && (
         <Alert className="text-center mt-3" variant='danger'>
-            {evalData.error.split(',').map(str => <p>{str}</p>)}
+            {(evalData.error + '').split(',').map(str => <p>{str}</p>)}
         </Alert>);
 
 
