@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ValidationHandler {
 
-    @ExceptionHandler({WebExchangeBindException.class})
-    public Mono<ResponseEntity> handleException(WebExchangeBindException e) {
-        var errors = e
-                .getFieldErrors()
+    @ExceptionHandler(WebExchangeBindException.class)
+    public Mono<ResponseEntity<List<String>>> handleException(WebExchangeBindException e) {
+        var errors = e.getBindingResult()
+        		.getFieldErrors()
                 .stream()
                 .map(fieldError -> new String( fieldError.getField() + ": " + fieldError.getDefaultMessage()))
-                .collect(Collectors.toList()).toString();
-        return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, errors));
+                .collect(Collectors.toList());
+        return Mono.just(ResponseEntity.badRequest().body(errors));
     }
 
 }
