@@ -17,8 +17,8 @@ RUN npm install
 COPY . ./
 
 # Arguments
-ARG REACT_APP_API_BASE_URL
-ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
+# ARG REACT_APP_API_BASE_URL
+# ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
 
 # Build the application
 RUN npm run build
@@ -34,6 +34,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80 to the Docker host, so we can access it 
 # from the outside.
-EXPOSE 3000
+# EXPOSE 3000
 
 ENTRYPOINT ["nginx","-g","daemon off;"]

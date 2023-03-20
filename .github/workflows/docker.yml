@@ -26,7 +26,7 @@ jobs:
          with:
             context: check-challenge-server
             push: true
-            tags: ghcr.io/smurzz/check-challenge-app-server:${{ github.sha }}
+            tags: ghcr.io/smurzz/check-challenge-app-server:1.0.0
          env:
             CR_PAT: ${{ secrets.CR_PAT }}
 
@@ -35,6 +35,6 @@ jobs:
          with:
             context: check-challenge-client
             push: true
-            tags: ghcr.io/smurzz/check-challenge-app-client:${{ github.sha }}
+            tags: ghcr.io/smurzz/check-challenge-app-client:1.0.0
          env:
             CR_PAT: ${{ secrets.CR_PAT }}
