@@ -3,6 +3,7 @@ package com.example.checkchallenge.service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 
@@ -25,6 +26,7 @@ public class ChallengeServiceTest {
 	private ChallengeService challengeService = new ChallengeService(mockClient);
 	
 	@Test
+	@WithMockUser
 	void testGetNotExistngChallenges() {
 		
 		Flux<Challenge> result = challengeService.getChallenges(notExistingUsername);
@@ -37,6 +39,7 @@ public class ChallengeServiceTest {
 	}
 
 	@Test
+	@WithMockUser
 	void testGetChallenges() {
 
 		Challenge challenge1 = new Challenge();
