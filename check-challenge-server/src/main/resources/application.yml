@@ -55,7 +55,7 @@ spring:
    data:
       mongodb:
          host: mongo
-         port: 27017
+         port: 27018
          database: check-challenges-db
          username: admin
          password: password

@@ -5,9 +5,7 @@ services:
   # App backend service
   app-server:
     # Configuration for building the docker image for the backend service
-    # build:
-    image: ghcr.io/smurzz/check-challenge-app-server:1.0.0 # Use an image built from the specified dockerfile
-      # dockerfile: Dockerfile
+    image: ghcr.io/smurzz/check-challenge-app-server:1.0.0 # Use an image built from github packages
     container_name: app-server
     ports:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
@@ -18,10 +16,8 @@ services:
         max-file: "3"
     restart: always
     links:
-      # - mongo-express
       - mongo
     depends_on: 
-      # - mongo-express
       - mongo
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - backend
@@ -29,11 +25,7 @@ services:
   
   # Frontend Service 
   app-client:
-    # build:
-    image: ghcr.io/smurzz/check-challenge-app-client:1.0.0 # Use an image built from the specified dockerfile
-      # dockerfile: Dockerfile
-      # args:
-        # REACT_APP_API_BASE_URL: http://localhost:8080
+    image: ghcr.io/smurzz/check-challenge-app-client:1.0.0 # Use an image built from github packages
     container_name: app-client
     ports:
       - "3000:3000" 
@@ -49,7 +41,7 @@ services:
     container_name: mongo
     restart: always
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
