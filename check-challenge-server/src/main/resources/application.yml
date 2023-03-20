@@ -31,6 +31,18 @@ spring:
 #        authentication-database: admin
          auto-index-creation: true
 ---
+logging:
+   level:
+      org:
+         springframework:
+            data:
+               mongodb:
+                  core:
+                     ReactiveMongoTemplate: DEBUG
+            web:
+               cors:
+                  reactive:
+                     DefaultCorsProcessor: DEBUG
 github:
    username: smurzz
 jwt:
