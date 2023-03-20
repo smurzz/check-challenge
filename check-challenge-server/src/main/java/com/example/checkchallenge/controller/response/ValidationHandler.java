@@ -1,20 +1,14 @@
 package com.example.checkchallenge.controller.response;
 
-import org.springframework.http.HttpStatus;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.support.WebExchangeBindException;
-import org.springframework.web.server.ResponseStatusException;
-
-import com.mongodb.DuplicateKeyException;
 
 import reactor.core.publisher.Mono;
-
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ValidationHandler {
