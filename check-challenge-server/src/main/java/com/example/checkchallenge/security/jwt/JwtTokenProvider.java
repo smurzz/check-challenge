@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 import static java.util.stream.Collectors.joining;
 
@@ -57,23 +56,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-//    public String createTokenFromEmail(String email) throws ExecutionException, InterruptedException {
-//        var user = userRepository.findByEmail(email).toFuture().get();
-//        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-//        return createToken(user.getEmail(), authorities);
-//    }
-//
-//    public String createToken(String email, Collection<? extends GrantedAuthority> authorities) {
-//        Claims claims = Jwts.claims().setSubject(email);
-//        claims.put(AUTHORITIES_KEY, authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(",")));
-//        return Jwts.builder()
-//                .setClaims(claims)
-//                .setIssuedAt(new Date())
-//                .setExpiration(new Date((new Date()).getTime() + validityInMs))
-//                .signWith(secretKeyValue, SignatureAlgorithm.HS256)
-//                .compact();
-//    }
-
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(secretKeyValue).build()
                 .parseClaimsJws(token)
@@ -82,6 +64,7 @@ public class JwtTokenProvider {
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
+    
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKeyValue).build()

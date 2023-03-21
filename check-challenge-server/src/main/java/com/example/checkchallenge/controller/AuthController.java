@@ -36,7 +36,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Validated
 public class AuthController {
-    private final ConcurrentHashMap<String, String> refreshTokenData;
+    private final ConcurrentHashMap<String, Authentication> refreshTokenData ;
     private final JwtTokenProvider tokenProvider;
     private final ReactiveAuthenticationManager authenticationManager;
     private final UserController userController;
@@ -56,7 +56,7 @@ public class AuthController {
                     httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
                     UUID refreshToken = Generators.randomBasedGenerator().generate();
-                    refreshTokenData.put(refreshToken.toString(), accessToken);
+                    refreshTokenData.put(refreshToken.toString(), this.tokenProvider.getAuthentication(accessToken));
                     Map<Object, Object> data = new HashMap<>();
                     data.put("access_token", accessToken);
                     data.put("refresh_token", refreshToken);
@@ -79,22 +79,21 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public Mono<ResponseEntity> refresh(@Valid @RequestBody RefreshAuthenticationRequest raRequest) {
-        String refreshToken = raRequest.getRefreshToken();
+    	String refreshToken = raRequest.getRefreshToken();
+        String email = raRequest.getEmail();
 
-        if (!refreshTokenData.containsKey(refreshToken)) {
+        Authentication authentication = refreshTokenData.get(refreshToken);
+        if (authentication == null) {
             return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         }
-       
-        try {
-            String tokenString = refreshTokenData.get(refreshToken);
-            Authentication authentication = this.tokenProvider.getAuthentication(tokenString);
-            String newToken = this.tokenProvider.createToken(authentication);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + newToken);
 
-            return Mono.just(new ResponseEntity<>(Map.of("access_token", newToken), httpHeaders, HttpStatus.OK));
-        } catch (Exception e) {
-            return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error renewing token: " + e.getMessage()));
+        if (!authentication.getName().equals(email)) {
+            return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         }
+
+        String newToken = tokenProvider.createToken(authentication);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + newToken);
+        return Mono.just(new ResponseEntity<>(Map.of("access_token", newToken), httpHeaders, HttpStatus.OK));
    }
 }
